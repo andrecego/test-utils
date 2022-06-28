@@ -29,6 +29,10 @@
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/andrecego/test-utils.git"
+	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.1.1",
