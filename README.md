@@ -4,7 +4,7 @@ WIP Test Utils to help in specs
 
 ## Features
 
-- Cycle between your file and the test file
+- Cycle between your file and the test file (F1 > Find Match)
 
 ## Setup by project
 
@@ -35,7 +35,7 @@ Assuming your project is named `project-name` (eg. /home/user/workspace/project-
 
 In this example we will replace `src` with `test/unit/specs` in all files with the extension `.vue` and `.js`.
 
-eg. `src/components/HelloWorld.vue` will be replaced with `test/unit/specs/HelloWorld.spec.js`, and take you to the test file.
+eg. `src/components/HelloWorld.vue` will be replaced with `test/unit/specs/components/HelloWorld.spec.js`, and take you to the test file.
 
 `local` supports multiple projects and each project can have multiple file extensions, even with the same file extension.
 - `fileExtension` is the extension of the file you want to cycle between

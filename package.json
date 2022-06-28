@@ -1,8 +1,9 @@
 {
-	"name": "test-utils",
-	"displayName": "test-utils",
+	"name": "test-util",
+	"displayName": "test-util",
 	"description": "",
 	"version": "0.0.1",
+	"publisher": "andrecego",
 	"engines": {
 		"vscode": "^1.68.0"
 	},

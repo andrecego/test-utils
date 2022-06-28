@@ -5,56 +5,22 @@ import * as fs from 'fs'
 import { findConfig, Configs } from './find/config'
 import { guessUri } from './find/guess-uri'
 
-function findFile2(configs: Configs): vscode.Uri | undefined {
-	if (!vscode.workspace.workspaceFolders) { return }
-	if (!vscode.window.activeTextEditor) { return }
+function guessUris(configs: Configs): vscode.Uri[] {
+	if (!vscode.workspace.workspaceFolders) { return [] }
+	if (!vscode.window.activeTextEditor) { return [] }
 
 	const rootPath = vscode.workspace.workspaceFolders[0].uri.fsPath
 	const filePath = vscode.window.activeTextEditor.document.fileName
 
-	const guessedUris =  configs
-		.map(config => guessUri(rootPath, filePath, config.fileExtension, config.specExtension, config.replaceFrom, config.replaceTo))
+	return configs.map(config => guessUri(rootPath, filePath, config.fileExtension, config.specExtension, config.replaceFrom, config.replaceTo))
+
+}
+
+function findFile(guessedUris: vscode.Uri[]): vscode.Uri | undefined {
+	const filePath = vscode.window.activeTextEditor?.document.fileName
 
 	return guessedUris.find(uri => fs.existsSync(uri.fsPath) && uri.fsPath !== filePath)
 }
-
-function findFile(currentExtension: string, guessedExtensions: string[], replaceFrom: string, replaceTo: string): vscode.Uri | undefined {
-	if (!vscode.workspace.workspaceFolders) { return }
-	if (!vscode.window.activeTextEditor) { return }
-
-	const rootPath = vscode.workspace.workspaceFolders[0].uri.fsPath
-	const filePath = vscode.window.activeTextEditor.document.fileName
-
-	return guessedExtensions
-		.map((guessedExtension: string) => guessUri(rootPath, filePath, currentExtension, guessedExtension, replaceFrom, replaceTo))
-		.find(uri => fs.existsSync(uri.fsPath))
-}
-
-
-// 	guessedUris.push(uri);
-// 	try {
-// 		console.log('foundUri before search', foundUri);
-// 		foundUri = await vscode.window.showTextDocument(uri);
-// 	} catch (error) {
-// 		console.log('foundUri in error', foundUri);
-// 		foundUri = undefined;
-// 		console.log(error);
-// 	} finally {
-// 		console.log('foundUri in finally', foundUri);
-// 		if (foundUri) { return foundUri; }
-// 	}
-
-// const guessPromises = guessedExtensions.map(guessedExtension => {
-// 	const uri = guessUri(rootPath, filePath, currentExtension, guessedExtension, replaceFrom, replaceTo);
-// 	return vscode.window.showTextDocument(uri);
-// });
-
-
-
-
-// 	vscode.window.showErrorMessage('Could not find file, searched for files: ' + guessedUris.map(uri => uri.fsPath).join(",\n "));
-// 	return undefined;
-// }
 
 export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('test-utils.findMatch', async function () {
@@ -63,8 +29,20 @@ export function activate(context: vscode.ExtensionContext) {
 		const configs = findConfig(vscode.window.activeTextEditor.document.fileName)
 		if (!configs || !configs.length) { return vscode.window.showErrorMessage('No config found for this file') }
 
-		const filePath = findFile2(configs)
-		if (!filePath) { return vscode.window.showErrorMessage('Could not find file') }
+		const guessedUris = guessUris(configs)
+		if (!guessedUris.length) { return vscode.window.showErrorMessage('No matching file found') }
+
+		const filePath = findFile(guessedUris)
+		if (!filePath) { 
+			const userChoice = await vscode.window.showErrorMessage('Could not find file', 'Create File')
+			if (userChoice === 'Create File') {
+				const uriToCreate = guessedUris[0]
+				await vscode.workspace.fs.writeFile(uriToCreate, new Buffer(''))
+				vscode.window.showTextDocument(uriToCreate)
+			}
+
+			return
+		}
 
 		await vscode.window.showTextDocument(filePath)
 	})
@@ -72,5 +50,4 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable)
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() { }
