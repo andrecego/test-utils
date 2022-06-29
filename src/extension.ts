@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const userChoice = await vscode.window.showErrorMessage('Could not find file', 'Create File')
 			if (userChoice === 'Create File') {
 				const uriToCreate = guessedUris[0]
-				await vscode.workspace.fs.writeFile(uriToCreate, new Buffer(''))
+				await vscode.workspace.fs.writeFile(uriToCreate, Buffer.from(''))
 				vscode.window.showTextDocument(uriToCreate)
 			}
 

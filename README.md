@@ -1,53 +1,72 @@
-# test-utils README
+# test-util
 
-WIP Test Utils to help in specs
+Test Utils to help in specs
 
 ## Features
 
 - Cycle between your file and the test file (F1 > Find Match)
 
-## Setup by project
+## Initial Setup
 
-Assuming your project is named `project-name` (eg. /home/user/workspace/project-name), on your `settings.json` file add the following:
+### resolves
+
+`resolves` key is the global configuration, that will apply for all workspaces, and is recommended to be used in the User Settings(`settings.json`) file
 
 ```json
+// settings.json
 {
   "test-utils": {
-    "local": {
-      "project-name":  [
-        {
-          "filePath": "src/**/*.vue",
-          "specPath": "test/unit/specs/**/*.spec.js",
-        },
-        {
-          "filePath": "src/**/*.js",
-          "specPath": "test/unit/specs/**/*.spec.js",
-        },
-        {
-          "filePath": "app/**/*.rb",
-          "specPath": "spec/**/*_spec.rb",
-        },
-        {
-          "filePath": "**/*.go",
-          "specPath": "**/*_test.go",
-        },
-      ]
-    }
+    "resolves":  [
+      {
+        "filePath": "src/**/*.vue",
+        "specPath": "test/unit/specs/**/*.spec.js",
+      },
+      {
+        "filePath": "src/**/*.js",
+        "specPath": "test/unit/specs/**/*.spec.js",
+      },
+      {
+        "filePath": "app/**/*.rb",
+        "specPath": "spec/**/*_spec.rb",
+      },
+      {
+        "filePath": "**/*.go",
+        "specPath": "**/*_test.go",
+      },
+    ]
   }
 }
 ```
 > The `**/*` is a required separator and it DOES NOT indicate a glob pattern.
 
+
 With a file named `src/components/HelloWorld.vue` it will be replaced to `test/unit/specs/components/HelloWorld.spec.js`, and take you to the test file.
 In this example we will replace `src` with `test/unit/specs` in all files with the extension `.vue` and `.js`.
 
-`local` supports multiple projects and each project can have multiple file extensions, even with the same file extension.
-- `filePath` is the path of your file
-- `specPath` is the path of your test file
+### localResolves
+
+`localResolves` key is recommended for a specific project configuration using the Workspace Settings(`.vscode/settings.json`) file
+
+It takes precedence over the `resolves` key, but don't override by default (if you want to override declare the `resolves` key as an empty array)
+
+```json
+// .vscode/settings.json
+{
+  "test-utils": {
+    "localResolves":  [
+      {
+        "filePath": "src/**/*.vue",
+        "specPath": "test/unit/**/*.spec.js",
+      }
+    ]
+  }
+}
+```
 
 
-## Extension Settings
+## Know Issues
 
+- This extension is not compatible with multiple workspaces at the same time.
 
 ## Release Notes
 

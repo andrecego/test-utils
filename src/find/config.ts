@@ -27,20 +27,12 @@ type FindConfig = {
 
 type Configs = Array<FindConfig>
 
-type ProjectConfig = {
-  [key: string]: Configs
+function getLocalConfigs(): Configs {
+  return vscode.workspace.getConfiguration('test-utils').get('localResolves') as Configs
 }
 
-
-function getUserLocalConfigs(): Configs | undefined {
-  if (!vscode.workspace.workspaceFolders) { return }
-
-  const currentProject = vscode.workspace.workspaceFolders[0].uri.fsPath.split('/').pop()
-  if (!currentProject) { return }
-
-  const config = vscode.workspace.getConfiguration('test-utils').get('local') as ProjectConfig
-
-  return config[currentProject]
+function getGlobalConfigs(): Configs {
+  return vscode.workspace.getConfiguration('test-utils').get('resolves') as Configs
 }
 
 function testExtensions(configs: Configs): Configs {
@@ -50,12 +42,11 @@ function testExtensions(configs: Configs): Configs {
   }))
 }
 
-
-
 function findConfig(fileName: string): Configs {
-  const userConfigs = getUserLocalConfigs() || []
+  const userConfigs = getLocalConfigs() || []
+  const globalConfigs = getGlobalConfigs() || []
 
-  const configs = [...userConfigs, ...testExtensions(userConfigs)]
+  const configs = [...userConfigs, ...testExtensions(userConfigs), ...globalConfigs, ...testExtensions(globalConfigs)]
   if (!configs) { return [] }
 
 	if (!vscode.workspace.workspaceFolders) { return [] }
@@ -63,7 +54,7 @@ function findConfig(fileName: string): Configs {
   const filePath = fileName.replace(rootPath, '')
 
   return configs.filter(({filePath: configFilePath}) => {
-    const [filePathStart, filePathEnd, ] = configFilePath.split('/**/*')
+    const [filePathStart, filePathEnd, ] = configFilePath.split('**/*')
   
     return filePath.startsWith(filePathStart) && filePath.endsWith(filePathEnd)
   })
