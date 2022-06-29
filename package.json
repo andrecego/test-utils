@@ -2,7 +2,7 @@
 	"name": "test-util",
 	"displayName": "test-util",
 	"description": "",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"publisher": "andrecego",
 	"engines": {
 		"vscode": "^1.68.0"
@@ -20,7 +20,68 @@
 				"command": "test-utils.findMatch",
 				"title": "Test Utils: Find Match"
 			}
-		]
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Visual Studio Code Test-Util configuration",
+			"properties": {
+				"test-utils": {
+					"type": "object",
+					"default": "",
+					"description": "andrecego.test-util configuration",
+					"properties": {
+						"resolves": {
+							"type": "array",
+							"default": [],
+							"description": "Global resolve configuration",
+							"items": {
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"filePath": {
+										"type": "string",
+										"description": "The path to the file to resolve in the format of 'src/**/*.js'"
+									},
+									"specPath": {
+										"type": "string",
+										"description": "The path to the spec file to resolve in the format of 'specs/test/**/*.spec.js'"
+									}
+								},
+								"required": [
+									"filePath",
+									"specPath"
+								],
+								"title": "Resolve"
+							}
+						},
+						"localResolves": {
+							"type": "array",
+							"default": [],
+							"description": "Global resolve configuration",
+							"items": {
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"filePath": {
+										"type": "string",
+										"description": "The path to the file to resolve in the format of 'src/**/*.js'"
+									},
+									"specPath": {
+										"type": "string",
+										"description": "The path to the spec file to resolve in the format of 'specs/test/**/*.spec.js'"
+									}
+								},
+								"required": [
+									"filePath",
+									"specPath"
+								],
+								"title": "Resolve"
+							}
+						}
+					}
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
