@@ -12,8 +12,7 @@ function guessUris(configs: Configs): vscode.Uri[] {
 	const rootPath = vscode.workspace.workspaceFolders[0].uri.fsPath
 	const filePath = vscode.window.activeTextEditor.document.fileName
 
-	return configs.map(config => guessUri(rootPath, filePath, config.fileExtension, config.specExtension, config.replaceFrom, config.replaceTo))
-
+	return configs.map(config => guessUri(rootPath, filePath, config.filePath, config.specPath))
 }
 
 function findFile(guessedUris: vscode.Uri[]): vscode.Uri | undefined {

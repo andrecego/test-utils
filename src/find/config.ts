@@ -3,36 +3,26 @@ import * as vscode from 'vscode'
 /* eslint-disable @typescript-eslint/naming-convention */
 const defaultConfigs: Configs = [
   {
-    fileExtension: '.vue',
-    specExtension: '.spec.js',
-    replaceFrom: 'src',
-    replaceTo: 'test/unit/specs'
+    filePath: 'src/**/*.vue',
+    specPath: 'test/unit/specs/**/*.spec.js',
   },
   {
-    fileExtension: '.js',
-    specExtension: '.spec.js',
-    replaceFrom: 'src',
-    replaceTo: 'test/unit/specs'
+    filePath: 'src/**/*.js',
+    specPath: 'test/unit/specs/**/*.spec.js',
   },
   {
-    fileExtension: '.rb',
-    specExtension: '_spec.rb',
-    replaceFrom: 'app',
-    replaceTo: 'spec'
+    filePath: 'app/**/*.rb',
+    specPath: 'spec/**/*_spec.rb',
   },
   {
-    fileExtension: '.go',
-    specExtension: '_test.go',
-    replaceFrom: '',
-    replaceTo: ''
+    filePath: '**/*.go',
+    specPath: '**/*_test.go',
   },
 ]
 
 type FindConfig = {
-  fileExtension: string
-  specExtension: string
-  replaceFrom: string
-  replaceTo: string
+  filePath: string
+  specPath: string
 };
 
 type Configs = Array<FindConfig>
@@ -55,10 +45,8 @@ function getUserLocalConfigs(): Configs | undefined {
 
 function testExtensions(configs: Configs): Configs {
   return configs.map(config => ({
-    fileExtension: config.specExtension,
-    specExtension: config.fileExtension,
-    replaceFrom: config.replaceTo,
-    replaceTo: config.replaceFrom
+    filePath: config.specPath,
+    specPath: config.filePath,
   }))
 }
 
@@ -68,13 +56,17 @@ function findConfig(fileName: string): Configs {
   const userConfigs = getUserLocalConfigs() || []
 
   const configs = [...userConfigs, ...testExtensions(userConfigs)]
-  
   if (!configs) { return [] }
 
-  // ordenar configs em ordem alfabetica de traz para frente
+	if (!vscode.workspace.workspaceFolders) { return [] }
+  const rootPath = vscode.workspace.workspaceFolders[0].uri.fsPath + '/'
+  const filePath = fileName.replace(rootPath, '')
 
-  // return configs.filter(config => filterByExtension(fileName, config.fileExtension)) 
-  return configs.filter(({fileExtension, specExtension}) => fileName.endsWith(fileExtension) || fileName.endsWith(specExtension))
+  return configs.filter(({filePath: configFilePath}) => {
+    const [filePathStart, filePathEnd, ] = configFilePath.split('/**/*')
+  
+    return filePath.startsWith(filePathStart) && filePath.endsWith(filePathEnd)
+  })
 }
 
 const EXTENSION_REGEX = /^.*?(?<ext>\..*)$/
