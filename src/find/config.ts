@@ -49,20 +49,15 @@ function findConfig(fileName: string): Configs {
   const configs = [...userConfigs, ...testExtensions(userConfigs), ...globalConfigs, ...testExtensions(globalConfigs)]
   if (!configs) { return [] }
 
-	if (!vscode.workspace.workspaceFolders) { return [] }
+  if (!vscode.workspace.workspaceFolders) { return [] }
   const rootPath = vscode.workspace.workspaceFolders[0].uri.fsPath + '/'
   const filePath = fileName.replace(rootPath, '')
 
-  return configs.filter(({filePath: configFilePath}) => {
-    const [filePathStart, filePathEnd, ] = configFilePath.split('**/*')
-  
+  return configs.filter(({ filePath: configFilePath }) => {
+    const [filePathStart, filePathEnd,] = configFilePath.split('**/*')
+
     return filePath.startsWith(filePathStart) && filePath.endsWith(filePathEnd)
   })
-}
-
-const EXTENSION_REGEX = /^.*?(?<ext>\..*)$/
-function filterByExtension(fileName: string, fileExtension: string): boolean {
-  return fileName.match(EXTENSION_REGEX)?.groups?.ext === fileExtension
 }
 
 export { findConfig, Configs }

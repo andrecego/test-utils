@@ -10,8 +10,7 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
-				// "/home/andre/workspace/revelo/himalaia",
-				"/home/andre/workspace/pessoal/partie",
+				// "/home/andre/workspace/pessoal/board-backend",
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
 			"outFiles": [

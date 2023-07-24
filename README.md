@@ -12,7 +12,7 @@ Test Utils to help in specs
 
 `resolves` key is the global configuration, that will apply for all workspaces, and is recommended to be used in the User Settings(`settings.json`) file
 
-```json
+```jsonc
 // settings.json
 {
   "test-utils": {
@@ -49,7 +49,7 @@ In this example we will replace `src` with `test/unit/specs` in all files with t
 
 It takes precedence over the `resolves` key, but don't override by default (if you want to override declare the `resolves` key as an empty array)
 
-```json
+```jsonc
 // .vscode/settings.json
 {
   "test-utils": {

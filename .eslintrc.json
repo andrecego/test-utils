@@ -11,8 +11,13 @@
     "rules": {
         "@typescript-eslint/naming-convention": "warn",
         "@typescript-eslint/semi": "off",
+        "@typescript-eslint/type-annotation-spacing": "warn",
         "curly": "warn",
         "eqeqeq": "warn",
+        "indent": [
+            "error",
+            2
+        ],
         "no-throw-literal": "warn",
         "semi": [
             "error",
