@@ -3,8 +3,16 @@
 Test Utils to help in specs
 
 ## Features
+All features can be uysed from the command center (`F1 > Find Match`)
 
-- Cycle between your file and the test file (F1 > Find Match)
+### Create test files with consistent naming in a easy way
+![Code_uKig0gKZLz](https://github.com/andrecego/test-utils/assets/55770890/e72a799b-140f-4b7d-9a0b-9bb6420a6cbf)
+
+### Cycle between your file and the test file
+![Code_SUkOiKlF8S](https://github.com/andrecego/test-utils/assets/55770890/7db3ffe5-7b01-4c20-9d19-a430f0b939c7)
+
+### Review GitHub PRs always cheking for unit tests
+![Code_2U7nSfRDSI](https://github.com/andrecego/test-utils/assets/55770890/5eecdb61-811a-4176-9be5-e2eb195254b1)
 
 ## Initial Setup
 
